@@ -2,7 +2,7 @@ import os
 from urllib import request
 
 
-def load_time_correction_data(standard: str = 'UT1') -> (list[int], list[int], list[float]):
+def load_time_correction_data(standard: str = 'UT1') -> (list[int], list[float], list[float]):
     """
     Load tabular time correction data from the US Naval Observatory for different time standards
     Attempts to locate the file '{standard}.txt', if not found, web is accessed to retrieve the
@@ -40,15 +40,15 @@ def load_time_correction_data(standard: str = 'UT1') -> (list[int], list[int], l
 
     # Initialise lists for return values (Julian dates (+fractional), correction data)
     jds: list[int] = []
-    frs: list[int] = []
+    frs: list[float] = []
     corrections: list[float] = []
 
     # Parse UT1 time standard data
     if standard == 'UT1':
         for row in data:
             date = row[7:15].split('.')
-            jds.append(int(date[0]))
-            frs.append(int(date[1]))
+            jds.append(int(date[0]) + 2400000)
+            frs.append(float('0.' + date[1]) + 0.5)
             corrections.append(float(row[58:68]))
 
     # Parse GPS time standard data
@@ -56,12 +56,13 @@ def load_time_correction_data(standard: str = 'UT1') -> (list[int], list[int], l
         for row in data:
             date = row[16:27].split('.')
             jds.append(int(date[0]))
-            frs.append(int(date[1]))
+            frs.append(float('0.' + date[1]))
             part1 = float(row[36:48].strip())
             part2 = float(row[59:64])
             part3 = float(row[70:78])
             mjd = int(date[0]) - 2400000.5
-            correction = part1 + (mjd - part2) * part3
+            diff_tai_gps = 19
+            correction = part1 + (mjd - part2) * part3 - diff_tai_gps
             corrections.append(correction)
 
     return jds, frs, corrections
