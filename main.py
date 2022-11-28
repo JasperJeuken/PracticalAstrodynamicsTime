@@ -54,10 +54,15 @@ def load_time_correction_data(standard: str = 'UT1') -> (list[int], list[int], l
     # Parse GPS time standard data
     if standard == 'GPS':
         for row in data:
-            date = row[17:27].split('.')
+            date = row[16:27].split('.')
             jds.append(int(date[0]))
             frs.append(int(date[1]))
-            corrections.append(float(row[36:48].strip()))
+            part1 = float(row[36:48].strip())
+            part2 = float(row[59:64])
+            part3 = float(row[70:78])
+            mjd = int(date[0]) - 2400000.5
+            correction = part1 + (mjd - part2) * part3
+            corrections.append(correction)
 
     return jds, frs, corrections
 
@@ -66,7 +71,7 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
 
     # Use the function to retrieve time correction data (choose a time standard)
-    corr_jds, corr_frs, corr_data = load_time_correction_data(standard='UT1')  # alternatively: GPS
+    corr_jds, corr_frs, corr_data = load_time_correction_data(standard='GPS')  # alternatively: GPS
 
     # Plot the data against the provided Julian date
     fig, ax = plt.subplots()
