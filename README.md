@@ -47,3 +47,6 @@ fig, ax = plt.subplots()
 ax.plot(corr_jds, corr_data)
 plt.show()
 ```
+
+This should result in the following graph displaying:
+![Example graph result](example_graph.png)
