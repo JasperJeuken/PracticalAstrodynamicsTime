@@ -9,9 +9,9 @@ function can be used to load information for both the
 
 ## How it works
 The tool retrieves time correction data for moving from several time standards to [UTC](https://en.wikipedia.org/wiki/Coordinated_Universal_Time).
-The user should specify which time standard should be looked up (see [Inputs](#-inputs)). The script initially looks for a local file with time correction information. If it does not exist, 
+The user should specify which time standard should be looked up (see [Inputs](#inputs)). The script initially looks for a local file with time correction information. If it does not exist, 
 it accesses US Naval Observatory data, retrieves it, and saves it into a file. The data is then read
-into Python and returned in a standardised format (see [Outputs](#-outputs)).
+into Python and returned in a standardised format (see [Outputs](#outputs)).
 
 ## Inputs
 The script takes as an input the name of the time standard to convert to UTC from. Currently,
